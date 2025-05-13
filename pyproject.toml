@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "anthro-benchmark"
 version = "0.1.0"
 authors = [
-  { name="Lujain Ibrahim", email="lujain.ibrahim@oii.ox.ac.uk" },
+  { name="Lujain Ibrahim", email="" },
 ]
 description = "A library for generating, rating, and analyzing dialogues to evaluate anthropomorphic behaviors in LLMs."
 readme = "README.md"
