@@ -1,0 +1,201 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform"
+  },
+  "@type": "sc:Dataset",
+  "name": "anthro-benchmark",
+  "description": "Prompts necessary for Anthro Benchmark.",
+  "conformsTo": "http://mlcommons.org/croissant/1.0",
+  "url": "https://github.com/google-deepmind/anthro-benchmark",
+  "version": "0.1.0",
+  "datePublished": "2025-05-12",
+  "license": "https://www.apache.org/licenses/LICENSE-2.0",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "first_turns.csv",
+      "name": "first_turns.csv",
+      "contentUrl": "https://raw.githubusercontent.com/google-deepmind/anthro-benchmark/refs/heads/main/prompt_sets/first_turns.csv",
+      "encodingFormat": "text/csv",
+      "sha256": "9ce5ecf6db13b58f22435c33a404152d83897cb7cbbf8da1f3111ed4332580c6"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "first_turns",
+      "name": "first_turns",
+      "description": "Records from the first_turns.csv file.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "name": "conv_id",
+          "description": "Conversation ID for a given prompt.",
+          "dataType": "Integer",
+          "source": {
+            "fileObject": {
+              "@id": "first_turns.csv"
+            },
+            "extract": {
+              "column": "conv_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "name": "use_domain",
+          "description": "Category of use scenario.",
+          "dataType": "Text",
+          "source": {
+            "fileObject": {
+              "@id": "first_turns.csv"
+            },
+            "extract": {
+              "column": "use_domain"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "name": "use_scenario",
+          "description": "Specific use scenario.",
+          "dataType": "Text",
+          "source": {
+            "fileObject": {
+              "@id": "first_turns.csv"
+            },
+            "extract": {
+              "column": "use_scenario"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "name": "empathy",
+          "description": "Empathy setting.",
+          "dataType": "Text",
+          "source": {
+            "fileObject": {
+              "@id": "first_turns.csv"
+            },
+            "extract": {
+              "column": "empathy"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "name": "professionalism",
+          "description": "Professionalism setting.",
+          "dataType": "Text",
+          "source": {
+            "fileObject": {
+              "@id": "first_turns.csv"
+            },
+            "extract": {
+              "column": "professionalism"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "name": "original_prompt",
+          "description": "Original prompt used to create first turn.",
+          "dataType": "Text",
+          "source": {
+            "fileObject": {
+              "@id": "first_turns.csv"
+            },
+            "extract": {
+              "column": "original_prompt"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "name": "cue",
+          "description": "Specific anthropomorphic behavior exhibited.",
+          "dataType": "Text",
+          "source": {
+            "fileObject": {
+              "@id": "first_turns.csv"
+            },
+            "extract": {
+              "column": "cue"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "name": "behavior_category",
+          "description": "Category of anthropomorphic behavior exhibited.",
+          "dataType": "Text",
+          "source": {
+            "fileObject": {
+              "@id": "first_turns.csv"
+            },
+            "extract": {
+              "column": "behavior_category"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "name": "user_first_turn",
+          "description": "First turn prompt used to begin generated conversation.",
+          "dataType": "Text",
+          "source": {
+            "fileObject": {
+              "@id": "first_turns.csv"
+            },
+            "extract": {
+              "column": "user_first_turn"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
