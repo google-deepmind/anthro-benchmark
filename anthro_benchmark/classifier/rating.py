@@ -182,7 +182,7 @@ def rate_dialogues(
                 "ours",
                 "ourselves",
             ]
-            pronoun_pattern = r"\\b(" + "|".join(pronouns) + r")\\b"
+            pronoun_pattern = r"\b(" + "|".join(pronouns) + r")\b"
 
             if not classifier_models:
                 if verbose:
