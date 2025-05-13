@@ -16,7 +16,7 @@
 Anthro Benchmark Package
 -----------------------
 
-A library for generating, rating, and analyzing dialogues 
+A library for generating, rating, and analyzing dialogues
 to evaluate anthropomorphic behaviors in LLMs.
 
 Subpackages:
@@ -30,9 +30,9 @@ from . import generator
 from . import classifier
 from . import analysis
 
-__version__ = "0.2.0" # Example version bump
+__version__ = "0.2.0"  # Example version bump
 
-# You might not need a top-level __all__ if you expect users to import 
+# You might not need a top-level __all__ if you expect users to import
 # specifically from subpackages (e.g., from anthro_benchmark.generator import ...)
 # If you want to expose specific things directly from anthro_benchmark, add them here.
-# __all__ = ["generator", "classifier", "analysis"] 
+# __all__ = ["generator", "classifier", "analysis"]
