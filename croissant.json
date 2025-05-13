@@ -57,7 +57,7 @@
       "@type": "cr:FileObject",
       "@id": "first_turns.csv",
       "name": "first_turns.csv",
-      "contentUrl": "https://raw.githubusercontent.com/google-deepmind/anthro-benchmark/refs/heads/main/prompt_sets/first_turns.csv",
+      "contentUrl": "https://anonymous.4open.science/api/repo/anthro-benchmark/file/prompt_sets/first_turns.csv",
       "encodingFormat": "text/csv",
       "sha256": "9ce5ecf6db13b58f22435c33a404152d83897cb7cbbf8da1f3111ed4332580c6"
     }
