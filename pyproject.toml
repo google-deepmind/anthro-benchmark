@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "anthro_benchmark"
+name = "anthro-benchmark"
 version = "0.1.0"
 authors = [
   { name="Lujain Ibrahim", email="lujain.ibrahim@oii.ox.ac.uk" },
@@ -28,8 +28,8 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/google-deepmind/anthro_benchmark"
-"Bug Tracker" = "https://github.com/google-deepmind/anthro_benchmark/issues"
+"Homepage" = "https://github.com/google-deepmind/anthro-benchmark"
+"Bug Tracker" = "https://github.com/google-deepmind/anthro-benchmark/issues"
 
 # Define the command-line script entry point
 [project.scripts]
