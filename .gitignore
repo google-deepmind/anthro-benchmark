@@ -1,6 +1,9 @@
 __pycache__/
 *.py[cod]
+*.egg-info
 .env
 .venv
 .ipynb_checkpoints
 .cache
+build
+dist
