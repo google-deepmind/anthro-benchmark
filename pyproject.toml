@@ -6,32 +6,30 @@ build-backend = "setuptools.build_meta"
 name = "anthro_benchmark"
 version = "0.1.0"
 authors = [
-  { name="Your Name", email="you@example.com" }, # TODO: Replace with your details
+  { name="Lujain Ibrahim", email="lujain.ibrahim@oii.ox.ac.uk" },
 ]
 description = "A library for generating, rating, and analyzing dialogues to evaluate anthropomorphic behaviors in LLMs."
-readme = "README.md" # Optional: Create a README.md file
+readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License", # TODO: Choose your license
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
     "pandas",
+    "anthropic",
+    "google-generativeai",
+    "openai",
+    "mistralai",
     "plotly",
-    "openai",       # Dependency for OpenAI models
-    "anthropic",    # Dependency for Anthropic models
-    # Add other dependencies if needed, e.g., specific versions
+    "kaleido",
 ]
 
-[project.optional-dependencies]
-dev = ["pytest", "flake8"] # Example development dependencies
-plotting = ["kaleido>=0.1.0,<0.2.0"] # Optional dependency for static plot export
-
 [project.urls]
-"Homepage" = "https://github.com/yourusername/anthro_benchmark" # TODO: Replace with your repo URL
-"Bug Tracker" = "https://github.com/yourusername/anthro_benchmark/issues"
+"Homepage" = "https://github.com/google-deepmind/anthro_benchmark"
+"Bug Tracker" = "https://github.com/google-deepmind/anthro_benchmark/issues"
 
 # Define the command-line script entry point
 [project.scripts]
