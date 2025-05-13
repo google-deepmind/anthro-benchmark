@@ -58,11 +58,11 @@ You only need to set up the API keys for the LLM providers you intend to use. Fo
 
 The `prompt_sets` directory contains the prompt datasets used for dialogue generation. The primary file is:
 
-- `master_prompts.csv`: The main dataset containing all prompts. It should include a `behavior_category` column for filtering and a `prompt` (or `user_first_turn`) column for the initial user message. Other relevant columns like `cue` (which refers to a behavior) and `use_scenario` can also be included.
+- `first_turns.csv`: The main dataset containing all prompts. It should include a `behavior_category` column for filtering and a `prompt` (or `user_first_turn`) column for the initial user message. Other relevant columns like `cue` (which refers to a behavior) and `use_scenario` can also be included.
 
 ### Behavior categories
 
-Prompts in `master_prompts.csv` can be organized by a `behavior_category` column. There are four categories available:
+Prompts in `first_turns.csv` can be organized by a `behavior_category` column. There are four categories available:
 
 - `internal states`
 - `personhood`
@@ -91,7 +91,7 @@ anthro-eval generate --user-llm-model "gemini-1.5-flash" --target-llm-model "gem
 anthro-eval generate --user-llm-model "gemini-1.5-flash" --target-llm-model "gemini-1.0-pro" --prompt-category-name "internal states" --behaviors "emotions" "desires" --num-dialogues 5 --output-dir generated_dialogues
 ```
 
-The system loads prompts from `prompt_sets/master_prompts.csv` and filters them based on the specified `--prompt-category-name`.
+The system loads prompts from `prompt_sets/first_turns.csv` and filters them based on the specified `--prompt-category-name`.
 
 ### 2. Rating dialogues
 

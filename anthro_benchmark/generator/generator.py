@@ -107,7 +107,7 @@ class DialogueGenerator:
     
     def _load_prompts(self) -> List[Dict[str, Any]]:
         """
-        Load prompts from master_prompts.csv, filtering by behavior_category if specified,
+        Load prompts from first_turns.csv, filtering by behavior_category if specified,
         or from a direct path. Handles renaming of 'user_first_turn' to 'prompt' and optional deduplication.
         
         Returns:
@@ -116,10 +116,10 @@ class DialogueGenerator:
         all_prompts_df = None
         
         try:
-            master_prompts_path = os.path.join(self.base_prompt_dir, "master_prompts.csv")
+            master_prompts_path = os.path.join(self.base_prompt_dir, "first_turns.csv")
             
             if self.prompt_category_names and os.path.exists(master_prompts_path):
-                # load from master_prompts.csv and filter by behavior_category
+                # load from first_turns.csv and filter by behavior_category
                 print(f"Loading prompts for behavior categories: {self.prompt_category_names}")
                 try:
                     all_prompts_df = pd.read_csv(master_prompts_path)
@@ -132,19 +132,19 @@ class DialogueGenerator:
                         print(f"No prompts found for the specified behavior categories: {self.prompt_category_names}")
                         return []
                 except Exception as e:
-                    print(f"Error reading master_prompts.csv: {e}")
+                    print(f"Error reading first_turns.csv: {e}")
                     return []
                     
             elif os.path.exists(master_prompts_path):
-                print("No category names or prompt path specified. Loading all available prompts from master_prompts.csv.")
+                print("No category names or prompt path specified. Loading all available prompts from first_turns.csv.")
                 try:
                     all_prompts_df = pd.read_csv(master_prompts_path)
-                    print(f"Successfully loaded {len(all_prompts_df)} prompts from master_prompts.csv.")
+                    print(f"Successfully loaded {len(all_prompts_df)} prompts from first_turns.csv.")
                 except Exception as e:
-                    print(f"Error loading master_prompts.csv: {e}")
+                    print(f"Error loading first_turns.csv: {e}")
                     return []
             else:
-                print(f"Neither master_prompts.csv nor prompt path found. No prompts loaded.")
+                print(f"Neither first_turns.csv nor prompt path found. No prompts loaded.")
                 return []
             
             print(f"Total prompts loaded: {len(all_prompts_df)} before further processing.")
