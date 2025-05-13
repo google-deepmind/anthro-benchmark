@@ -1,7 +1,7 @@
 # Anthropomorphism Benchmark (anthro-benchmark)
 
 A library for generating, rating, and analyzing dialogues to evaluate anthropomorphic behaviors in LLMs, developed in [Multi-turn Evaluation of Anthropomorphic Behaviours in Large Language
-Models](https://arxiv.org/pdf/2502.07077).
+Models](https://arxiv.org/abs/2502.07077).
 
 ## Structure
 
