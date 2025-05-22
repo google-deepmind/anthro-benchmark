@@ -24,7 +24,7 @@ if os.path.exists("README.md"):
 setup(
     name="anthro-benchmark",
     version="0.1.0",
-    packages=find_packages(),
+    packages=find_packages(include=['anthro_benchmark', 'anthro_benchmark.*']),
     py_modules=["anthro_eval_cli"],
     install_requires=[
         "pandas",
