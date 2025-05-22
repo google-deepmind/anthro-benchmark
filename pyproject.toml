@@ -34,3 +34,9 @@ dependencies = [
 # Define the command-line script entry point
 [project.scripts]
 anthro-eval = "anthro_eval_cli:main" 
+
+[tool.setuptools]
+py-modules = ["anthro_eval_cli"]
+
+[tool.setuptools.packages.find]
+include = ["anthro_benchmark*"]
