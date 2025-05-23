@@ -46,8 +46,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/google-deepmind/anthro-benchmark",
+    license="Apache-2.0",
     classifiers=[
-        "License :: Apache 2.0",
         "Programming Language :: Python :: 3.11",
     ],
     python_requires=">=3.8",
