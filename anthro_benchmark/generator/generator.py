@@ -109,8 +109,8 @@ class DialogueGenerator:
         self.dialogues = []
         self.prompts = self._load_prompts()
 
-        self.user_llm = LLMClient.create(self.user_llm_config)
-        self.target_llm = LLMClient.create(self.target_llm_config)
+        self.user_llm = LLMClient(**self.user_llm_config)
+        self.target_llm = LLMClient(**self.target_llm_config)
 
     def _load_prompts(self) -> List[Dict[str, Any]]:
         """

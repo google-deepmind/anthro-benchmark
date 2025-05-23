@@ -82,7 +82,7 @@ class LLMClassifier:
         cue_definition_text: Optional[str] = None,
         cue_examples_list: Optional[List[Dict[str, str]]] = None,
     ):
-        self.llm_client = LLMClient.create(classifier_llm_config)
+        self.llm_client = LLMClient(**classifier_llm_config)
         self.cue_name = cue_name
 
         if cue_definition_text is None:
