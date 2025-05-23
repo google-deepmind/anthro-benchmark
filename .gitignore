@@ -4,6 +4,7 @@ __pycache__/
 *.egg-info
 .env
 .venv
+venv
 .ipynb_checkpoints
 .cache
 build
