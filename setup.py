@@ -24,14 +24,11 @@ if os.path.exists("README.md"):
 setup(
     name="anthro-benchmark",
     version="0.1.0",
-    packages=find_packages(include=['anthro_benchmark', 'anthro_benchmark.*']),
+    packages=find_packages(include=["anthro_benchmark", "anthro_benchmark.*"]),
     py_modules=["anthro_eval_cli"],
     install_requires=[
+        "litellm",
         "pandas",
-        "anthropic",
-        "google-generativeai",
-        "openai",
-        "mistralai",
         "plotly",
         "kaleido",
     ],

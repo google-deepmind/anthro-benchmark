@@ -81,13 +81,13 @@ Generate dialogues using prompts filtered by behavior categories:
 ```bash
 # Generate dialogues using prompts from the "internal states" category
 # User LLM and Target LLM are both gemini-1.5-flash
-anthro-eval generate --user-llm-model "gemini-1.5-flash" --target-llm-model "gemini-1.5-flash" --prompt-category-name "internal states" --num-dialogues 10 --output-dir generated_dialogues
+anthro-eval generate --user-llm-model "gemini/gemini-1.5-flash" --target-llm-model "gemini/gemini-1.5-flash" --prompt-category-name "internal states" --num-dialogues 10 --output-dir generated_dialogues
 
 # Generate dialogues using prompts from multiple categories, with gemini-1.0-pro as the target
-anthro-eval generate --user-llm-model "gemini-1.5-flash" --target-llm-model "gemini-1.0-pro" --prompt-category-name "personhood" "relationship building" --num-dialogues 20 --output-dir generated_dialogues
+anthro-eval generate --user-llm-model "gemini/gemini-1.5-flash" --target-llm-model "gemini/gemini-1.0-pro" --prompt-category-name "personhood" "relationship building" --num-dialogues 20 --output-dir generated_dialogues
 
 # Generate dialogues filtering for specific behaviors within categories
-anthro-eval generate --user-llm-model "gemini-1.5-flash" --target-llm-model "gemini-1.0-pro" --prompt-category-name "internal states" --behaviors "emotions" "desires" --num-dialogues 5 --output-dir generated_dialogues
+anthro-eval generate --user-llm-model "gemini/gemini-1.5-flash" --target-llm-model "gemini/gemini-1.0-pro" --prompt-category-name "internal states" --behaviors "emotions" "desires" --num-dialogues 5 --output-dir generated_dialogues
 ```
 
 The system loads prompts from `prompt_sets/first_turns.csv` and filters them based on the specified `--prompt-category-name`.
@@ -98,14 +98,14 @@ Rate generated dialogues for anthropomorphic behaviors. Behaviors are defined in
 
 ```bash
 # Rate dialogues for specific behaviors using a single classifier (gemini-1.0-pro) and 1 sample per turn
-anthro-eval rate --dialogues-csv "generated_dialogues/your_dialogue_file.csv" --classifier-model "gemini-1.0-pro" --behaviors-to-rate "empathy" "desires" --num-samples 1
+anthro-eval rate --dialogues-csv "generated_dialogues/your_dialogue_file.csv" --classifier-model "gemini/gemini-1.0-pro" --behaviors-to-rate "empathy" "desires" --num-samples 1
 
 # Rate dialogues using multiple classifier models (gemini-1.0-pro and gemini-1.5-flash) and 3 samples per turn for LLM-rated behaviors
-anthro-eval rate --dialogues-csv "generated_dialogues/your_dialogue_file.csv" --classifier-model "gemini-1.5-pro" "gemini-1.5-flash" --behaviors-to-rate "empathy" "validation" --num-samples 3
+anthro-eval rate --dialogues-csv "generated_dialogues/your_dialogue_file.csv" --classifier-model "gemini/gemini-1.5-pro" "gemini/gemini-1.5-flash" --behaviors-to-rate "empathy" "validation" --num-samples 3
 
 # Rate dialogues for all available behaviors defined in behavior_dict.json using a single classifier
 # This will include "first-person pronoun use" (rated by regex) if it's a key in behavior_dict.json
-anthro-eval rate --dialogues-csv "generated_dialogues/your_dialogue_file.csv" --classifier-model "gemini-1.5-flash"
+anthro-eval rate --dialogues-csv "generated_dialogues/your_dialogue_file.csv" --classifier-model "gemini/gemini-1.5-flash"
 ```
 
 - You can specify one or more `--classifier-model` names. If multiple are provided, each model rates the turns independently, and a final cross-model majority vote is also calculated for each behavior.
