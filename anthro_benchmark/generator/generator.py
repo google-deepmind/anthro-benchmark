@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+import importlib.resources
 import os
 import uuid
 from datetime import datetime
@@ -67,7 +67,7 @@ class DialogueGenerator:
         num_turns: int = 5,
         num_dialogues: int = 10,
         prompt_category_names: Optional[List[str]] = None,
-        base_prompt_dir: str = "prompt_sets",
+        custom_prompt_csv: str = None,
         use_all_variants_of_original_prompt: bool = True,  # if False, deduplicates by 'original_prompt' column
         output_dir: Optional[str] = None,
         default_csv_filename: Optional[str] = None,
@@ -83,8 +83,8 @@ class DialogueGenerator:
             target_system_prompt: System prompt for the target LLM.
             num_turns: Number of dialogue turn pair.
             num_dialogues: Number of dialogues to generate.
-            prompt_category_names: List of prompt category names (e.g., ["personhood", "physical_embodiment"]) to load from base_prompt_dir.
-            base_prompt_dir: Base directory where category-specific prompt CSV files are stored.
+            prompt_category_names: List of prompt category names (e.g., ["personhood", "physical_embodiment"]) to load from prompt csv.
+            custom_prompt_csv: Path to custom CSV file to use for dialogue generation. Uses prompt_sets.csv if no CSV is specified.
             use_all_variants_of_original_prompt: If True, it uses all variants of the original prompt (i.e., all use domains and scenarios). If False, it deduplicates by 'original_prompt'.
             output_dir: Directory to save generated dialogues. Defaults to "./generated_dialogues".
             default_csv_filename: Default filename for the CSV output. Defaults to "dialogues.csv".
@@ -100,7 +100,7 @@ class DialogueGenerator:
         self.num_turns = num_turns
         self.num_dialogues = num_dialogues
         self.prompt_category_names = prompt_category_names or []
-        self.base_prompt_dir = base_prompt_dir
+        self.custom_prompt_csv = custom_prompt_csv
         self.use_all_variants_of_original_prompt = use_all_variants_of_original_prompt
 
         self.output_dir = output_dir or "generated_dialogues"
@@ -122,115 +122,89 @@ class DialogueGenerator:
         """
         all_prompts_df = None
 
-        try:
-            master_prompts_path = os.path.join(self.base_prompt_dir, "first_turns.csv")
+        if self.custom_prompt_csv:
+            all_prompts_df = pd.read_csv(self.custom_prompt_csv)
+        else:
+            all_prompts_df = pd.read_csv(
+                (importlib.resources.files("anthro_benchmark.prompt_sets") / "first_turns.csv").open()
+            )
+    
+        print(
+            f"Total prompts loaded: {len(all_prompts_df)} before further processing."
+        )
 
-            if self.prompt_category_names and os.path.exists(master_prompts_path):
-                # load from first_turns.csv and filter by behavior_category
-                print(
-                    f"Loading prompts for behavior categories: {self.prompt_category_names}"
+        if self.prompt_category_names:
+            # filter by behavior_category
+            print(
+                f"Filtering prompts for behavior categories: {self.prompt_category_names}"
+            )
+            all_prompts_df = all_prompts_df[
+                all_prompts_df["behavior_category"].isin(
+                    self.prompt_category_names
                 )
-                try:
-                    all_prompts_df = pd.read_csv(master_prompts_path)
-                    print(
-                        f"Successfully loaded {len(all_prompts_df)} prompts from {master_prompts_path}"
-                    )
+            ]
+            print(
+                f"After filtering by behavior categories {self.prompt_category_names}: {len(all_prompts_df)} prompts"
+            )
 
-                    all_prompts_df = all_prompts_df[
-                        all_prompts_df["behavior_category"].isin(
-                            self.prompt_category_names
-                        )
-                    ]
-                    print(
-                        f"After filtering by behavior categories {self.prompt_category_names}: {len(all_prompts_df)} prompts"
-                    )
-
-                    if all_prompts_df.empty:
-                        print(
-                            f"No prompts found for the specified behavior categories: {self.prompt_category_names}"
-                        )
-                        return []
-                except Exception as e:
-                    print(f"Error reading first_turns.csv: {e}")
-                    return []
-
-            elif os.path.exists(master_prompts_path):
+            if all_prompts_df.empty:
                 print(
-                    "No category names or prompt path specified. Loading all available prompts from first_turns.csv."
+                    f"No prompts found for the specified behavior categories: {self.prompt_category_names}"
                 )
-                try:
-                    all_prompts_df = pd.read_csv(master_prompts_path)
-                    print(
-                        f"Successfully loaded {len(all_prompts_df)} prompts from first_turns.csv."
-                    )
-                except Exception as e:
-                    print(f"Error loading first_turns.csv: {e}")
-                    return []
+                return []
+
+        if "user_first_turn" in all_prompts_df.columns:
+            all_prompts_df.rename(
+                columns={"user_first_turn": "prompt"}, inplace=True
+            )
+        elif "prompt" not in all_prompts_df.columns:
+            print(
+                "Warning: Neither 'user_first_turn' nor 'prompt' column found in the loaded prompts. Initial messages might be missing or default."
+            )
+
+        if "behavior_category" in all_prompts_df.columns:
+            all_prompts_df.rename(
+                columns={"behavior_category": "category"}, inplace=True
+            )
+        elif "category" not in all_prompts_df.columns:
+            print(
+                "Warning: Neither 'behavior_category' nor 'category' column found for prompt categorization. Category metadata might be 'default'."
+            )
+
+        if not self.use_all_variants_of_original_prompt:
+            if "original_prompt" in all_prompts_df.columns:
+                original_row_count = len(all_prompts_df)
+                all_prompts_df.drop_duplicates(
+                    subset=["original_prompt"], keep="first", inplace=True
+                )
+                print(
+                    f"Deduplicated prompts based on 'original_prompt' column. Went from {original_row_count} to {len(all_prompts_df)} prompts."
+                )
             else:
                 print(
-                    "Neither first_turns.csv nor prompt path found. No prompts loaded."
+                    "Warning: 'use_all_variants_of_original_prompt' is False, but 'original_prompt' column not found for deduplication."
                 )
-                return []
 
+        prompts = all_prompts_df.to_dict(orient="records")
+
+        if self.cues:
+            original_count = len(prompts)
+            prompts = [p for p in prompts if p.get("cue") in self.cues]
             print(
-                f"Total prompts loaded: {len(all_prompts_df)} before further processing."
+                f"Filtered prompts by cues: {self.cues}. Kept {len(prompts)} out of {original_count}."
             )
 
-            if "user_first_turn" in all_prompts_df.columns:
-                all_prompts_df.rename(
-                    columns={"user_first_turn": "prompt"}, inplace=True
-                )
-            elif "prompt" not in all_prompts_df.columns:
-                print(
-                    "Warning: Neither 'user_first_turn' nor 'prompt' column found in the loaded prompts. Initial messages might be missing or default."
-                )
-
-            if "behavior_category" in all_prompts_df.columns:
-                all_prompts_df.rename(
-                    columns={"behavior_category": "category"}, inplace=True
-                )
-            elif "category" not in all_prompts_df.columns:
-                print(
-                    "Warning: Neither 'behavior_category' nor 'category' column found for prompt categorization. Category metadata might be 'default'."
-                )
-
-            if not self.use_all_variants_of_original_prompt:
-                if "original_prompt" in all_prompts_df.columns:
-                    original_row_count = len(all_prompts_df)
-                    all_prompts_df.drop_duplicates(
-                        subset=["original_prompt"], keep="first", inplace=True
-                    )
-                    print(
-                        f"Deduplicated prompts based on 'original_prompt' column. Went from {original_row_count} to {len(all_prompts_df)} prompts."
-                    )
-                else:
-                    print(
-                        "Warning: 'use_all_variants_of_original_prompt' is False, but 'original_prompt' column not found for deduplication."
-                    )
-
-            prompts = all_prompts_df.to_dict(orient="records")
-
-            if self.cues:
-                original_count = len(prompts)
-                prompts = [p for p in prompts if p.get("cue") in self.cues]
-                print(
-                    f"Filtered prompts by cues: {self.cues}. Kept {len(prompts)} out of {original_count}."
-                )
-
-            if not prompts:
-                print(
-                    "No prompts available after loading and all filtering steps. Using default prompts if any dialogues are generated."
-                )
-                return []
-
+        if not prompts:
             print(
-                f"Successfully prepared {len(prompts)} prompts for dialogue generation."
+                "No prompts available after loading and all filtering steps. Using default prompts if any dialogues are generated."
             )
-            return prompts
-
-        except Exception as e:
-            print(f"Unexpected error loading prompts: {e}")
             return []
+
+        print(
+            f"Successfully prepared {len(prompts)} prompts for dialogue generation."
+        )
+        return prompts
+
 
     def generate_dialogues(self) -> List[Dict[str, Any]]:
         """

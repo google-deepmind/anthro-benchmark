@@ -101,7 +101,7 @@ def generate_dialogues_command(args):
             num_turns=args.num_turns,
             num_dialogues=args.num_dialogues,
             prompt_category_names=args.prompt_category_name,
-            base_prompt_dir=args.base_prompt_dir,
+            custom_prompt_csv=args.custom_prompt_csv,
             use_all_variants_of_original_prompt=not args.deduplicate_original_prompts,
             output_dir=args.output_dir,
             default_csv_filename=dynamic_csv_filename,
@@ -215,10 +215,10 @@ def main():
         help='One or more prompt category names (e.g., "personhood" "physical_embodiment").',
     )
     prompt_group.add_argument(
-        "--base-prompt-dir",
+        "--custom-prompt-csv",
         type=str,
-        default="prompt_sets",
-        help="Base directory for category CSVs (default: prompt_sets).",
+        required=False,
+        help="Path to custom CSV file to use for dialogue generation. Uses prompt_sets.csv if no CSV is specified.",
     )
     prompt_group.add_argument(
         "--behaviors",

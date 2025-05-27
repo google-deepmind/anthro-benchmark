@@ -25,6 +25,7 @@ setup(
     name="anthro-benchmark",
     version="0.1.0",
     packages=find_packages(include=["anthro_benchmark", "anthro_benchmark.*"]),
+    include_package_data=True,
     py_modules=["anthro_eval_cli"],
     install_requires=[
         "litellm",
