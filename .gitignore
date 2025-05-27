@@ -1,5 +1,6 @@
 generated_dialogues**
 rated_dialogues**
+analysis_results**
 
 __pycache__/
 .python
