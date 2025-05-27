@@ -13,3 +13,4 @@ venv
 .cache
 build
 dist
+.DS_Store
