@@ -28,9 +28,7 @@ import sys
 import pandas as pd
 
 from anthro_benchmark.classifier.classifiers import LLMClassifier
-
-PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_CUE_DETAILS_FILE = os.path.join(PACKAGE_DIR, "behavior_dict.json")
+from anthro_benchmark.classifier.cue_definitions import CUE_DEFINITIONS
 
 
 def get_majority_vote(scores: list[int]) -> int:
@@ -75,7 +73,7 @@ def rate_dialogues(
 ) -> str:
     """
     Rate dialogues for specified cues using one or more LLM classifiers.
-    It always uses the default cue details file ('my_cue_details.json') located in the classifier package.
+    Cues are defined in anthro_benchmark.classifier.cue_definitions
 
     Args:
         dialogues_csv_path: Path to the input CSV file containing dialogues
@@ -111,37 +109,16 @@ def rate_dialogues(
         print(error_msg, file=sys.stderr)
         raise ValueError(error_msg) from e
 
-    all_cue_details = {}
-    current_cue_details_file_path = DEFAULT_CUE_DETAILS_FILE
-
-    if not os.path.exists(current_cue_details_file_path):
-        error_msg = f"Error: Default cue details file not found: {current_cue_details_file_path}"
-        print(error_msg, file=sys.stderr)
-        raise FileNotFoundError(error_msg)
-
-    try:
-        with open(current_cue_details_file_path, "r", encoding="utf-8") as f:
-            all_cue_details = json.load(f)
-        if verbose:
-            print(
-                f"Successfully loaded cue details from {current_cue_details_file_path}"
-            )
-    except Exception as e:
-        error_msg = f"Error reading or parsing cue details file {current_cue_details_file_path}: {e}"
-        print(error_msg, file=sys.stderr)
-        raise ValueError(error_msg) from e
-
     if not cues_to_rate:
-        cues_to_rate = list(all_cue_details.keys())
+        cues_to_rate = list(CUE_DEFINITIONS.keys())
         if verbose:
             print(
                 f"No specific cues specified. Rating all available cues: {cues_to_rate}"
             )
 
-    missing_cues = [cue for cue in cues_to_rate if cue not in all_cue_details]
+    missing_cues = [cue for cue in cues_to_rate if cue not in CUE_DEFINITIONS]
     if missing_cues:
-        error_msg = f"Error: The following cues are not defined in {current_cue_details_file_path}: {', '.join(missing_cues)}"
-        print(error_msg, file=sys.stderr)
+        error_msg = f"Error: The following cues are not defined: {', '.join(missing_cues)}"
         raise ValueError(error_msg)
 
     if verbose:
@@ -240,13 +217,12 @@ def rate_dialogues(
                     f"  No classifier models specified for LLM rating of cue '{cue_to_rate}'. Skipping LLM rating part."
                 )
 
-            cue_specific_details = all_cue_details.get(cue_to_rate, {})
+            cue_specific_details = CUE_DEFINITIONS.get(cue_to_rate, {})
             custom_definition = cue_specific_details.get("definition")
             custom_examples = cue_specific_details.get("examples")
 
             if not custom_definition:
-                error_msg = f"Error: No definition found for cue '{cue_to_rate}' in {current_cue_details_file_path} (required for LLM rating)"
-                print(error_msg, file=sys.stderr)
+                error_msg = f"Error: No definition found for cue '{cue_to_rate}' (required for LLM rating)"
                 raise ValueError(error_msg)
 
             # LLM model loop

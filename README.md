@@ -7,7 +7,7 @@ A library for generating, rating, and analyzing dialogues to evaluate anthropomo
 The library is organized into several key packages and modules:
 
 - `anthro_benchmark/generator`: Handles dialogue generation between the user LLM and target LLM.
-- `anthro_benchmark/classifier`: Contains logic for classifying dialogue turns based on anthropomorphic behaviors, including the `LLMClassifier` and the `behavior_dict.json` behavior definitions.
+- `anthro_benchmark/classifier`: Contains logic for classifying dialogue turns based on anthropomorphic behaviors, including the `LLMClassifier` and the `cue_definitions.py` behavior definitions.
 - `anthro_benchmark/core`: Core utilities, including `llm_client.py` for interacting with various LLM APIs.
 - `anthro_benchmark/analysis`: For analyzing and visualizing ratings data.
 - `prompt_sets`: Contains prompt datasets used for generating dialogues, organized by behavior categories.
@@ -94,7 +94,7 @@ The system loads prompts from `prompt_sets/first_turns.csv` and filters them bas
 
 ### 2. Rating dialogues
 
-Rate generated dialogues for anthropomorphic behaviors. Behaviors are defined in `anthro_benchmark/classifier/behavior_dict.json`.
+Rate generated dialogues for anthropomorphic behaviors. Behaviors are defined in `anthro_benchmark/classifier/cue_definitions.py`.
 
 ```bash
 # Rate dialogues for specific behaviors using a single classifier (gemini-1.0-pro) and 1 sample per turn
@@ -103,14 +103,14 @@ anthro-eval rate --dialogues-csv "generated_dialogues/your_dialogue_file.csv" --
 # Rate dialogues using multiple classifier models (gemini-1.0-pro and gemini-1.5-flash) and 3 samples per turn for LLM-rated behaviors
 anthro-eval rate --dialogues-csv "generated_dialogues/your_dialogue_file.csv" --classifier-model "gemini/gemini-1.5-pro" "gemini/gemini-1.5-flash" --behaviors-to-rate "empathy" "validation" --num-samples 3
 
-# Rate dialogues for all available behaviors defined in behavior_dict.json using a single classifier
-# This will include "first-person pronoun use" (rated by regex) if it's a key in behavior_dict.json
+# Rate dialogues for all available behaviors defined in cue_definitions.py using a single classifier
+# This will include "first-person pronoun use" (rated by regex) if it's a key in cue_definitions.py
 anthro-eval rate --dialogues-csv "generated_dialogues/your_dialogue_file.csv" --classifier-model "gemini/gemini-1.5-flash"
 ```
 
 - You can specify one or more `--classifier-model` names. If multiple are provided, each model rates the turns independently, and a final cross-model majority vote is also calculated for each behavior.
 - `--num-samples` can be `1` or `3`. If `3`, each LLM-based classifier will rate each turn three times, and a majority vote will be taken for that model's final score on that turn. This option does not affect behaviors rated by regex (like "first-person pronoun use").
-- If `--behaviors-to-rate` is not specified, all behaviors from `behavior_dict.json` are rated.
+- If `--behaviors-to-rate` is not specified, all behaviors from `cue_definitions.py` are rated.
 - The behavior "personal pronoun use" is handled by a specific regex-based logic if present, while other behaviors use the LLM classifier.
 - Rated dialogues are saved in the `rated_dialogues/` directory by default.
 
