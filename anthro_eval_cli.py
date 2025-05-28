@@ -20,6 +20,7 @@ import re
 import traceback
 
 from absl import app
+from absl.flags import argparse_flags
 
 from anthro_benchmark.generator import (
     DialogueGenerator,
@@ -197,7 +198,7 @@ def summarize_command(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(
+    parser = argparse_flags.ArgumentParser(
         description="CLI for Anthropomorphic Behavior Evaluation in LLMs."
     )
     subparsers = parser.add_subparsers(
