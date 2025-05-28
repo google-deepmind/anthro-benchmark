@@ -197,7 +197,7 @@ def summarize_command(args):
         traceback.print_exc()
 
 
-def main():
+def _parse_flags(_):
     parser = argparse_flags.ArgumentParser(
         description="CLI for Anthropomorphic Behavior Evaluation in LLMs."
     )
@@ -364,9 +364,23 @@ def main():
 
     summarize_parser.set_defaults(func=summarize_command)
 
-    args = parser.parse_args()
-    args.func(args)
+    return parser.parse_args()
+
+
+def run(args):
+    if args.command == "generate":
+        generate_dialogues_command(args)
+    elif args.command == "rate":
+        rate_dialogues_command(args)
+    elif args.command == "summarize":
+        summarize_command(args)
+    else:
+        print(f"Unknown command: {args.command}")
+
+
+def main():
+    app.run(run, flags_parser=_parse_flags)
 
 
 if __name__ == "__main__":
-    app.run(main)
+    main()
