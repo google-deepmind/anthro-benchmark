@@ -19,6 +19,8 @@ from datetime import datetime
 import re
 import traceback
 
+from absl import app
+
 from anthro_benchmark.generator import (
     DialogueGenerator,
     LLMGenerationError,
@@ -366,4 +368,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    app.run(main)

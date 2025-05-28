@@ -28,6 +28,7 @@ setup(
     include_package_data=True,
     py_modules=["anthro_eval_cli"],
     install_requires=[
+        "absl-py",
         "litellm",
         "pandas",
         "plotly",
