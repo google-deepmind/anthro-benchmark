@@ -10,7 +10,7 @@ authors = [
 ]
 description = "A library for generating, rating, and analyzing dialogues to evaluate anthropomorphic behaviors in LLMs."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = "Apache-2.0"
 classifiers = [
     "Programming Language :: Python :: 3",
