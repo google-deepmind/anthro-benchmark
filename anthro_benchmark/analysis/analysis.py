@@ -50,8 +50,6 @@ def load_data(
     rated_csv_path: str,
 ) -> Tuple[pd.DataFrame, Dict[str, List[str]], List[str]]:
     """Loads rated data and identifies cue columns."""
-    if not os.path.exists(rated_csv_path):
-        raise FileNotFoundError(f"Rated dialogues CSV not found: {rated_csv_path}")
 
     df = pd.read_csv(rated_csv_path)
 
