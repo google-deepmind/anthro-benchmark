@@ -93,11 +93,6 @@ def rate_dialogues(
         print(f"Classifier models: {classifier_models}")
         print("-" * 30)
 
-    if not os.path.exists(dialogues_csv_path):
-        error_msg = f"Error: Input dialogues CSV not found: {dialogues_csv_path}"
-        print(error_msg, file=sys.stderr)
-        raise FileNotFoundError(error_msg)
-
     try:
         dialogues_df = pd.read_csv(dialogues_csv_path)
         if verbose:
@@ -386,12 +381,6 @@ def rate_dialogues(
             print(f"Generated output path: {output_filename}")
 
     try:
-        output_dir = os.path.dirname(output_filename)
-        if output_dir and not os.path.exists(output_dir):
-            os.makedirs(output_dir, exist_ok=True)
-            if verbose:
-                print(f"Created output directory: {output_dir}")
-
         dialogues_df.to_csv(output_filename, index=False)
         if verbose:
             print(
