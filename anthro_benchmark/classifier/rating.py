@@ -384,9 +384,9 @@ def rate_dialogues(
         dialogues_df.to_csv(output_filename, index=False)
         if verbose:
             print(
-                f"Successfully saved rated dialogues to: {os.path.abspath(output_filename)}"
+                f"Successfully saved rated dialogues to: {output_filename}"
             )
-        return os.path.abspath(output_filename)
+        return output_filename
     except Exception as e:
         error_msg = f"Error saving rated dialogues to {output_filename}: {e}"
         print(error_msg, file=sys.stderr)
