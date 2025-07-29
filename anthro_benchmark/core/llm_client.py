@@ -25,7 +25,6 @@ class LLMClient:
 
     model: str
     temperature: float = 0.7
-    max_tokens: int = 1000
 
     def generate(self, messages: list) -> str:
         """
@@ -44,7 +43,6 @@ class LLMClient:
             model=self.model,
             messages=messages,
             temperature=self.temperature,
-            max_tokens=self.max_tokens,
         )
         response_text = response.choices[0].message.content
         return response_text
