@@ -19,7 +19,7 @@ classifiers = [
 ]
 dependencies = [
     "absl-py",
-    "litellm",
+    "litellm<=1.82.6",
     "pandas",
     "plotly",
     "kaleido",
