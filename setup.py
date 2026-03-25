@@ -29,7 +29,7 @@ setup(
     py_modules=["anthro_eval_cli"],
     install_requires=[
         "absl-py",
-        "litellm",
+        "litellm<=1.82.6",
         "pandas",
         "plotly",
         "kaleido",
